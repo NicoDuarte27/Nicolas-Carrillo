@@ -62,8 +62,3 @@ button {
   width: 80%;
   max-width: 500px;
 }
-
-
-// Inicializar
-filtrarPorCategoria();
-cargarCarrito();
