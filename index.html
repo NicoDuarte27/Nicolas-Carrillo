@@ -1,28 +1,40 @@
-<h1>🛒 Tienda de Nicolás</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nicolás Carrillo | Tienda de Cómics</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
 
-<label for="categoria">Filtrar por categoría:</label>
-<select id="categoria" onchange="filtrarPorCategoria()">
-  <option value="todos">Todos</option>
-  <option value="Gamer">Gamer</option>
-  <option value="Pro">Pro</option>
-  <option value="LED">LED</option>
-</select>
+  <header>
+    <h1>🦸‍♂️ Tienda de Cómics - Nicolás Carrillo</h1>
+    <p>¡Los mejores títulos de superhéroes y más!</p>
 
-<div id="productos"></div>
+    <label for="categoria">Filtrar por categoría:</label>
+    <select id="categoria" onchange="filtrarPorCategoria()">
+      <option value="todos">Todos</option>
+      <option value="DC">DC</option>
+      <option value="Marvel">Marvel</option>
+      <option value="Independiente">Independiente</option>
+    </select>
+  </header>
 
-<div class="carrito">
-  <h2>🧾 Carrito de Compras</h2>
-  <p><strong>Productos en carrito: <span id="cantidad-carrito">0</span></strong></p>
-  <ul id="lista-carrito"></ul>
-  <p><strong>Total: $<span id="total">0.00</span></strong></p>
-  <button class="vaciar" onclick="vaciarCarrito()">🧼 Vaciar Carrito</button>
-  <button class="finalizar" onclick="finalizarCompra()">✅ Finalizar Compra</button>
+  <main>
+    <section id="productos" class="productos"></section>
 
-  <div class="pago">
-    <h3>💳 Método de pago</h3>
-    <div id="paypal-button-container" style="margin-top: 10px; display: none;"></div>
-  </div>
-</div>
+    <section class="carrito">
+      <h2>🛒 Carrito de compras</h2>
+      <ul id="lista-carrito"></ul>
+      <p><strong>Total: $<span id="total">0.00</span></strong></p>
+      <p>Productos en carrito: <span id="cantidad-carrito">0</span></p>
+      <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+      <div id="paypal-button-container" style="margin-top: 20px;"></div>
+    </section>
+  </main>
 
-<!-- SDK de PayPal -->
-<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&components=buttons"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+  <script src="app.js"></script>
+</body>
+</html>
