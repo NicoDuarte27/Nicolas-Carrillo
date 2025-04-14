@@ -1,159 +1,131 @@
-// Aquí están los productos reales de diademas gamer
-
-const productos = [
-  {
-    id: 1,
-    nombre: "Diadema Gamer RGB Logitech G Pro X",
-    precio: 120.0,
-    categoria: "gaming",
-    img: "https://m.media-amazon.com/images/I/91m2i6c9v1L._AC_SL1500_.jpg"
-  },
-  {
-    id: 2,
-    nombre: "Diadema Gamer Corsair HS50 Pro",
-    precio: 60.0,
-    categoria: "gaming",
-    img: "https://m.media-amazon.com/images/I/91HYkxBOJ4L._AC_SL1500_.jpg"
-  },
-  {
-    id: 3,
-    nombre: "Diadema Gaming Razer Kraken V3",
-    precio: 140.0,
-    categoria: "gaming",
-    img: "https://m.media-amazon.com/images/I/61WjFNsH4jL._AC_SL1500_.jpg"
-  },
-  {
-    id: 4,
-    nombre: "Diadema Normal Sony MDR-ZX110",
-    precio: 30.0,
-    categoria: "normal",
-    img: "https://m.media-amazon.com/images/I/71yD6l6y1hL._AC_SL1500_.jpg"
-  },
-  {
-    id: 5,
-    nombre: "Diadema Gaming SteelSeries Arctis 7",
-    precio: 180.0,
-    categoria: "gaming",
-    img: "https://m.media-amazon.com/images/I/61tRPV6J5-L._AC_SL1500_.jpg"
-  },
-  {
-    id: 6,
-    nombre: "Diadema Normal Sennheiser HD 206",
-    precio: 50.0,
-    categoria: "normal",
-    img: "https://m.media-amazon.com/images/I/91dPz7Zyq9L._AC_SL1500_.jpg"
-  }
-];
-
-let carrito = new Map();
-
-const contenedor = document.getElementById("productos");
-const listaCarrito = document.getElementById("lista-carrito");
-const totalEl = document.getElementById("total");
-const cantidadEl = document.getElementById("cantidad-carrito");
-
-function mostrarProductos(lista) {
-  contenedor.innerHTML = "";
-  lista.forEach(p => {
-    const div = document.createElement("div");
-    div.classList.add("producto");
-    div.innerHTML = `
-      <img src="${p.img}" alt="${p.nombre}">
-      <h3>${p.nombre}</h3>
-      <p>$${p.precio.toFixed(2)}</p>
-      <button onclick="agregarAlCarrito(${p.id})">Agregar</button>
-    `;
-    contenedor.appendChild(div);
-  });
+body {
+  background-color: #1e1e2f;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
-function filtrarPorCategoria() {
-  const cat = document.getElementById("categoria").value;
-  if (cat === "todos") {
-    mostrarProductos(productos);
-  } else {
-    const filtrados = productos.filter(p => p.categoria === cat);
-    mostrarProductos(filtrados);
-  }
+header {
+  background-color: #292954;
+  padding: 20px;
+  text-align: center;
 }
 
-function agregarAlCarrito(id) {
-  const producto = productos.find(p => p.id === id);
-  if (carrito.has(id)) {
-    carrito.get(id).cantidad++;
-  } else {
-    carrito.set(id, { ...producto, cantidad: 1 });
-  }
-  actualizarCarrito();
-  guardarCarrito();
+h1 {
+  color: #f1c40f;
+  margin: 0 0 10px 0;
 }
 
-function actualizarCarrito() {
-  listaCarrito.innerHTML = "";
-  let total = 0;
-  let cantidad = 0;
-  carrito.forEach(item => {
-    total += item.precio * item.cantidad;
-    cantidad += item.cantidad;
-    const li = document.createElement("li");
-    li.innerHTML = `${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}
-      <button onclick="eliminarDelCarrito(${item.id})">❌</button>`;
-    listaCarrito.appendChild(li);
-  });
-  totalEl.textContent = total.toFixed(2);
-  cantidadEl.textContent = cantidad;
+.filtro {
+  margin: 20px 0;
 }
 
-function eliminarDelCarrito(id) {
-  const item = carrito.get(id);
-  if (item.cantidad > 1) {
-    item.cantidad--;
-  } else {
-    carrito.delete(id);
-  }
-  actualizarCarrito();
-  guardarCarrito();
+select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  background-color: #343454;
+  color: white;
+  font-size: 16px;
 }
 
-function vaciarCarrito() {
-  carrito.clear();
-  actualizarCarrito();
-  guardarCarrito();
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-// PayPal
-paypal.Buttons({
-  createOrder: function (data, actions) {
-    const total = Array.from(carrito.values()).reduce((sum, item) => sum + item.precio * item.cantidad, 0);
-    return actions.order.create({
-      purchase_units: [{
-        amount: {
-          value: total.toFixed(2)
-        }
-      }]
-    });
-  },
-  onApprove: function (data, actions) {
-    return actions.order.capture().then(function (details) {
-      alert(`Gracias ${details.payer.name.given_name}, tu compra fue exitosa!`);
-      vaciarCarrito();
-    });
-  }
-}).render('#paypal-button-container');
-
-// Guardar/cargar carrito
-function guardarCarrito() {
-  localStorage.setItem("carritoNicolas", JSON.stringify(Array.from(carrito.entries())));
+.productos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 1200px;
 }
 
-function cargarCarrito() {
-  const data = localStorage.getItem("carritoNicolas");
-  if (data) {
-    carrito = new Map(JSON.parse(data));
-    actualizarCarrito();
-  }
+.producto {
+  background-color: #343454;
+  border-radius: 10px;
+  padding: 15px;
+  width: 220px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
 }
 
-// Inicialización
-mostrarProductos(productos);
-cargarCarrito();
+.producto:hover {
+  transform: translateY(-5px);
+}
+
+.producto img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.producto h3 {
+  font-size: 16px;
+  margin: 10px 0;
+  min-height: 40px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #2ecc71;
+}
+
+.carrito {
+  background-color: #292954;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  margin-top: 20px;
+}
+
+.carrito h2 {
+  margin-top: 0;
+}
+
+#lista-carrito {
+  list-style: none;
+  padding: 0;
+}
+
+#lista-carrito li {
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#lista-carrito button {
+  background-color: #e74c3c;
+  padding: 4px 8px;
+  margin-left: 10px;
+}
+
+#lista-carrito button:hover {
+  background-color: #c0392b;
+}
+
+#paypal-button-container {
+  margin-top: 20px;
+}
